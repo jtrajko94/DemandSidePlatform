@@ -110,6 +110,16 @@ Impression / Click / Conversion events → Redpanda → Consumers → ClickHouse
 
 Open **http://localhost:8080** to browse the `impressions` and `clicks` topics in real time. Requires `docker compose up -d` to be running.
 
+### Reporting endpoints
+
+```bash
+# All campaigns summary (impressions, clicks, spend, CTR)
+curl http://localhost:3001/report/campaigns
+
+# Single campaign
+curl http://localhost:3001/report/campaigns/<campaign_id>
+```
+
 ### Test tracking endpoints
 
 ```bash

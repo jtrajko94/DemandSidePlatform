@@ -6,6 +6,7 @@ import { startTrackingConsumer } from "./consumers/trackingConsumer";
 import { healthRoutes } from "./routes/health";
 import { bidRoutes } from "./routes/bid";
 import { trackRoutes } from "./routes/track";
+import { reportRoutes } from "./routes/report";
 
 export async function buildApp() {
   const app = Fastify({ logger: true });
@@ -28,6 +29,7 @@ export async function buildApp() {
   app.register(healthRoutes);
   app.register(bidRoutes);
   app.register(trackRoutes);
+  app.register(reportRoutes);
 
   return app;
 }

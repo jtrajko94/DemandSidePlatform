@@ -156,5 +156,7 @@ Add to this as we build:
 | OpenRTB | "Industry-standard protocol between SSPs and DSPs — decouples them behind a contract so either side can swap implementations" |
 | Targeting engine | "Pure function — campaign + bid request in, boolean out. No I/O, independently testable, runs millions of times per second" |
 | Scoring / pCTR | "Bid price = expected value, not a flat CPM. EV = pCTR × pCVR × advertiser's CPA goal. ML model predicts pCTR from a feature vector" |
+| Attribution | "Click credited to the impression with the same requestId — last-touch model. JOIN on request_id links click → impression → campaign at query time" |
+| Async consumer | "Consumer writes events to Postgres at its own pace — producer never waits. Raw event tables grow unbounded so production systems pre-aggregate into summary tables on a schedule" |
 | LRU vs TTL eviction | "LRU evicts least recently used — good for access-pattern-based caching. TTL evicts on schedule — better for data that goes stale on time, like campaign config" |
 | Redpanda vs Kafka | "Redpanda is Kafka-compatible, no JVM, no Zookeeper — same client API, operationally simpler for dev. Swap broker address in prod, zero code changes" |
