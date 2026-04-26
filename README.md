@@ -46,6 +46,14 @@ cd backend && npm run dev
 
 Server runs on `http://localhost:3001`.
 
+### 3. Run the Mock SSP (optional)
+
+Simulates an SSP sending OpenRTB bid requests every 2 seconds. Requires the backend to be running.
+
+```bash
+cd backend && npm run mock-ssp
+```
+
 #### Test the endpoints
 
 ```bash

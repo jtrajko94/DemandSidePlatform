@@ -94,20 +94,21 @@ infra/       — docker-compose (Postgres, Redis, Kafka/Redpanda)
 
 ## Commands
 
-> Commands will be added here as each service is scaffolded. Expected shape:
-
 ```bash
-# Infra
-docker compose up -d
+# Install all workspace dependencies (run from root)
+npm install
 
-# Backend
+# Infra — start Redis + Redpanda
+cd infra && docker compose up -d
+
+# Backend — dev server on port 3001
 cd backend && npm run dev
-npm run test
-npm run build
 
-# Frontend
+# Mock SSP — sends OpenRTB bid requests every 2s (backend must be running)
+cd backend && npm run mock-ssp
+
+# Frontend — dev server on port 3000 (not built yet)
 cd frontend && npm run dev
-npm run build
 ```
 
 ---
