@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
-import { BidRequest, BidResponse, NosBidReason } from "@dsp/shared";
+import { BidRequest, BidResponse, NosBidReason, Campaign } from "@dsp/shared";
+import { getCampaignsFromRedis } from "../lib/campaignLoader";
 
 export async function bidRoutes(app: FastifyInstance) {
   app.post<{ Body: BidRequest }>("/bid", async (request, reply) => {
@@ -13,7 +14,22 @@ export async function bidRoutes(app: FastifyInstance) {
       return reply.code(204).send(noBid);
     }
 
-    // Hardcoded bid for now — targeting + scoring comes later
+    const campaigns = await getCampaignsFromRedis();
+
+    if (campaigns.length === 0) {
+      return reply.code(204).send({
+        id: bidRequest.id,
+        nbr: NosBidReason.NoMatchingCampaign,
+      });
+    }
+
+    // Pick the highest-paying campaign (basic auction logic for now)
+    const winner = campaigns.reduce((best: Campaign, c: Campaign) =>
+      c.bid_price > best.bid_price ? c : best
+    );
+
+    const imp = bidRequest.imp[0];
+
     const bidResponse: BidResponse = {
       id: bidRequest.id,
       cur: "USD",
@@ -22,13 +38,13 @@ export async function bidRoutes(app: FastifyInstance) {
           seat: "dsp-1",
           bid: [
             {
-              id: "bid-1",
-              impid: bidRequest.imp[0].id,
-              price: 1.5,  // $1.50 CPM
-              adid: "ad-creative-001",
-              crid: "creative-001",
-              w: bidRequest.imp[0].banner?.w,
-              h: bidRequest.imp[0].banner?.h,
+              id: `bid-${Date.now()}`,
+              impid: imp.id,
+              price: winner.bid_price,
+              adid: winner.id,
+              crid: winner.creative_id,
+              w: imp.banner?.w,
+              h: imp.banner?.h,
             },
           ],
         },
