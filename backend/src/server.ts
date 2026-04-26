@@ -3,11 +3,15 @@ import { buildApp } from "./app";
 
 const PORT = Number(process.env.PORT) || 3001;
 
-const app = buildApp();
+async function main() {
+  const app = await buildApp();
 
-app.listen({ port: PORT, host: "0.0.0.0" }, (err) => {
-  if (err) {
-    app.log.error(err);
-    process.exit(1);
-  }
-});
+  app.listen({ port: PORT, host: "0.0.0.0" }, (err) => {
+    if (err) {
+      app.log.error(err);
+      process.exit(1);
+    }
+  });
+}
+
+main();
