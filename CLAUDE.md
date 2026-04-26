@@ -152,3 +152,9 @@ Add to this as we build:
 | Kafka | "Decouples ingestion from processing — producers don't wait for consumers" |
 | React Query | "Separates server state from UI state; handles caching, deduplication, and background refetching" |
 | Virtualization | "Prevents rendering thousands of DOM nodes — only visible rows exist in the DOM" |
+| Cache-aside pattern | "Load campaigns from Postgres into Redis at startup, serve from memory during auctions — Postgres is never touched on the hot path" |
+| OpenRTB | "Industry-standard protocol between SSPs and DSPs — decouples them behind a contract so either side can swap implementations" |
+| Targeting engine | "Pure function — campaign + bid request in, boolean out. No I/O, independently testable, runs millions of times per second" |
+| Scoring / pCTR | "Bid price = expected value, not a flat CPM. EV = pCTR × pCVR × advertiser's CPA goal. ML model predicts pCTR from a feature vector" |
+| LRU vs TTL eviction | "LRU evicts least recently used — good for access-pattern-based caching. TTL evicts on schedule — better for data that goes stale on time, like campaign config" |
+| Redpanda vs Kafka | "Redpanda is Kafka-compatible, no JVM, no Zookeeper — same client API, operationally simpler for dev. Swap broker address in prod, zero code changes" |

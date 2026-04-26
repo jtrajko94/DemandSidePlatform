@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import { BidRequest, BidResponse, NosBidReason, Campaign } from "@dsp/shared";
 import { getCampaignsFromRedis } from "../lib/campaignLoader";
 import { matchesCampaign } from "../lib/targeting";
+import { scoreCampaign } from "../lib/scoring";
 
 export async function bidRoutes(app: FastifyInstance) {
   app.post<{ Body: BidRequest }>("/bid", async (request, reply) => {
@@ -25,9 +26,10 @@ export async function bidRoutes(app: FastifyInstance) {
       });
     }
 
-    // Pick the highest-paying eligible campaign
-    const winner = eligible.reduce((best: Campaign, c: Campaign) =>
-      c.bid_price > best.bid_price ? c : best
+    // Score each eligible campaign and pick the highest predicted CPM
+    const scored = eligible.map((c) => scoreCampaign(c, bidRequest));
+    const winner = scored.reduce((best, s) =>
+      s.predictedCpm > best.predictedCpm ? s : best
     );
 
     const imp = bidRequest.imp[0];
@@ -42,9 +44,9 @@ export async function bidRoutes(app: FastifyInstance) {
             {
               id: `bid-${Date.now()}`,
               impid: imp.id,
-              price: winner.bid_price,
-              adid: winner.id,
-              crid: winner.creative_id,
+              price: parseFloat(winner.predictedCpm.toFixed(4)),
+              adid: winner.campaign.id,
+              crid: winner.campaign.creative_id,
               w: imp.banner?.w,
               h: imp.banner?.h,
             },
