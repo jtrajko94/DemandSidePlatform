@@ -83,6 +83,8 @@ curl -X POST http://localhost:3001/bid \
 cd frontend && npm run dev
 ```
 
+Dashboard runs on **http://localhost:3000**. Polls the reporting API every 5 seconds automatically.
+
 ## Architecture
 
 ### Hot Path (<100ms)
@@ -100,7 +102,7 @@ Impression / Click / Conversion events → Redpanda → Consumers → ClickHouse
 | Service | Port | Purpose |
 |---|---|---|
 | Backend | 3001 | Bidder API, tracking endpoints |
-| Frontend | 3000 | Real-time dashboard |
+| Frontend | 3000 | Real-time dashboard (Next.js App Router, React Query polling) |
 | Redis | 6379 | Hot-path campaign cache |
 | Redpanda | 9092 | Event streaming (external) |
 | Redpanda Console | 8080 | UI to browse Kafka topics and messages |

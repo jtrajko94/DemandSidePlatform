@@ -107,7 +107,7 @@ cd backend && npm run dev
 # Mock SSP — sends OpenRTB bid requests every 2s (backend must be running)
 cd backend && npm run mock-ssp
 
-# Frontend — dev server on port 3000 (not built yet)
+# Frontend — dev server on port 3000
 cd frontend && npm run dev
 ```
 
@@ -158,5 +158,8 @@ Add to this as we build:
 | Scoring / pCTR | "Bid price = expected value, not a flat CPM. EV = pCTR × pCVR × advertiser's CPA goal. ML model predicts pCTR from a feature vector" |
 | Attribution | "Click credited to the impression with the same requestId — last-touch model. JOIN on request_id links click → impression → campaign at query time" |
 | Async consumer | "Consumer writes events to Postgres at its own pace — producer never waits. Raw event tables grow unbounded so production systems pre-aggregate into summary tables on a schedule" |
+| React Query | "Separates server state from UI state. staleTime prevents redundant refetches, refetchInterval drives polling — no useEffect or setInterval needed" |
+| useMemo | "Caches derived aggregations (total spend, avg CTR) so they don't recompute on every render. Worth it when the calculation is expensive or the component re-renders frequently for unrelated reasons" |
+| Next.js rewrites | "Frontend proxies /api/* to the backend — no hardcoded URLs in client code. Swap the destination in next.config.mjs to point at prod backend with zero code changes" |
 | LRU vs TTL eviction | "LRU evicts least recently used — good for access-pattern-based caching. TTL evicts on schedule — better for data that goes stale on time, like campaign config" |
 | Redpanda vs Kafka | "Redpanda is Kafka-compatible, no JVM, no Zookeeper — same client API, operationally simpler for dev. Swap broker address in prod, zero code changes" |
