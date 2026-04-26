@@ -20,14 +20,16 @@ export async function startTrackingConsumer(): Promise<void> {
       if (event.type === "impression") {
         await db.query(
           `INSERT INTO impressions (request_id, campaign_id, creative_id, price, os, app_bundle)
-           VALUES ($1, $2, $3, $4, $5, $6)`,
+           VALUES ($1, $2, $3, $4, $5, $6)
+           ON CONFLICT (request_id) DO NOTHING`,
           [event.requestId, event.campaignId, event.creativeId, event.price, event.os, event.appBundle]
         );
         console.log(`[impression] saved — campaign=${event.campaignId} price=$${event.price}`);
       } else if (event.type === "click") {
         await db.query(
           `INSERT INTO clicks (request_id, campaign_id)
-           VALUES ($1, $2)`,
+           VALUES ($1, $2)
+           ON CONFLICT (request_id) DO NOTHING`,
           [event.requestId, event.campaignId]
         );
         console.log(`[click] saved — campaign=${event.campaignId} requestId=${event.requestId}`);

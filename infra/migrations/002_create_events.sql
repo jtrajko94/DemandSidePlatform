@@ -21,3 +21,7 @@ CREATE TABLE clicks (
 
 CREATE INDEX idx_clicks_campaign_id ON clicks (campaign_id);
 CREATE INDEX idx_clicks_request_id ON clicks (request_id);
+
+-- Idempotency constraints — duplicate events (retries, beacon misfires) are silently ignored
+ALTER TABLE impressions ADD CONSTRAINT impressions_request_id_unique UNIQUE (request_id);
+ALTER TABLE clicks ADD CONSTRAINT clicks_request_id_unique UNIQUE (request_id);
