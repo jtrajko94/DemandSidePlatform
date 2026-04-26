@@ -6,9 +6,14 @@ const CAMPAIGN_KEY = "campaigns:active";
 const REFRESH_INTERVAL_MS = 60_000; // re-sync from Postgres every 60s
 
 export async function loadCampaignsIntoRedis(): Promise<void> {
-  const result = await db.query<Campaign>(
-    `SELECT * FROM campaigns WHERE status = 'active'`
-  );
+  let result;
+  try {
+    result = await db.query<Campaign>(
+      `SELECT * FROM campaigns WHERE status = 'active'`
+    );
+  } catch (err) {
+    throw err;
+  }
 
   const campaigns = result.rows;
 

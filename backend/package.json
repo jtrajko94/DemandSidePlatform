@@ -2,8 +2,8 @@
   "name": "@dsp/backend",
   "version": "1.0.0",
   "scripts": {
-    "dev": "ts-node-dev --respawn src/server.ts",
-    "mock-ssp": "ts-node-dev src/mock-ssp/index.ts",
+    "dev": "ts-node-dev --respawn -r dotenv/config src/server.ts dotenv_config_path=../.env",
+    "mock-ssp": "ts-node-dev -r dotenv/config src/mock-ssp/index.ts dotenv_config_path=../.env",
     "build": "tsc",
     "start": "node dist/server.js"
   },
