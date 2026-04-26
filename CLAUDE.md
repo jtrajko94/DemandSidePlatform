@@ -101,7 +101,7 @@ npm install
 # Infra — start Redis + Redpanda
 cd infra && docker compose up -d
 
-# Backend — dev server on port 3001
+# Backend — dev server on port 3001 (reads ../.env via dotenv_config_path)
 cd backend && npm run dev
 
 # Mock SSP — sends OpenRTB bid requests every 2s (backend must be running)

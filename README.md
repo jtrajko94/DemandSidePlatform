@@ -26,7 +26,11 @@ Required variables:
 
 | Variable | Description |
 |---|---|
-| `DATABASE_URL` | Supabase Postgres connection string |
+| `DB_HOST` | Supabase host e.g. `db.xxx.supabase.co` |
+| `DB_PORT` | Postgres port (default: `5432`) |
+| `DB_NAME` | Database name (default: `postgres`) |
+| `DB_USER` | Database user (default: `postgres`) |
+| `DB_PASSWORD` | Database password |
 | `REDIS_URL` | Redis connection (default: `redis://localhost:6379`) |
 | `KAFKA_BROKER` | Kafka/Redpanda broker (default: `localhost:9092`) |
 
