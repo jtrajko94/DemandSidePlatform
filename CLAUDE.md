@@ -98,7 +98,7 @@ infra/       — docker-compose (Postgres, Redis, Kafka/Redpanda)
 # Install all workspace dependencies (run from root)
 npm install
 
-# Infra — start Redis + Redpanda
+# Infra — start Redis + Redpanda + Redpanda Console (http://localhost:8080)
 cd infra && docker compose up -d
 
 # Backend — dev server on port 3001 (reads ../.env via dotenv_config_path)

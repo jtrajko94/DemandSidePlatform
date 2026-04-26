@@ -102,5 +102,34 @@ Impression / Click / Conversion events → Redpanda → Consumers → ClickHouse
 | Backend | 3001 | Bidder API, tracking endpoints |
 | Frontend | 3000 | Real-time dashboard |
 | Redis | 6379 | Hot-path campaign cache |
-| Redpanda | 9092 | Event streaming |
+| Redpanda | 9092 | Event streaming (external) |
+| Redpanda Console | 8080 | UI to browse Kafka topics and messages |
 | Postgres | Supabase | Campaign data, source of truth |
+
+### Redpanda Console
+
+Open **http://localhost:8080** to browse the `impressions` and `clicks` topics in real time. Requires `docker compose up -d` to be running.
+
+### Test tracking endpoints
+
+```bash
+# Fire an impression event
+curl -X POST http://localhost:3001/track/impression \
+  -H "Content-Type: application/json" \
+  -d '{
+    "requestId": "req-123",
+    "campaignId": "campaign-abc",
+    "creativeId": "creative-001",
+    "price": 1.44,
+    "os": "iOS",
+    "appBundle": "com.example.newsapp"
+  }'
+
+# Fire a click event
+curl -X POST http://localhost:3001/track/click \
+  -H "Content-Type: application/json" \
+  -d '{
+    "requestId": "req-123",
+    "campaignId": "campaign-abc"
+  }'
+```
