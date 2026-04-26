@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { BidRequest, BidResponse, NosBidReason, Campaign } from "@dsp/shared";
 import { getCampaignsFromRedis } from "../lib/campaignLoader";
+import { matchesCampaign } from "../lib/targeting";
 
 export async function bidRoutes(app: FastifyInstance) {
   app.post<{ Body: BidRequest }>("/bid", async (request, reply) => {
@@ -15,16 +16,17 @@ export async function bidRoutes(app: FastifyInstance) {
     }
 
     const campaigns = await getCampaignsFromRedis();
+    const eligible = campaigns.filter((c) => matchesCampaign(c, bidRequest));
 
-    if (campaigns.length === 0) {
+    if (eligible.length === 0) {
       return reply.code(204).send({
         id: bidRequest.id,
         nbr: NosBidReason.NoMatchingCampaign,
       });
     }
 
-    // Pick the highest-paying campaign (basic auction logic for now)
-    const winner = campaigns.reduce((best: Campaign, c: Campaign) =>
+    // Pick the highest-paying eligible campaign
+    const winner = eligible.reduce((best: Campaign, c: Campaign) =>
       c.bid_price > best.bid_price ? c : best
     );
 
