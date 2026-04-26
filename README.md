@@ -44,6 +44,27 @@ cd infra && docker compose up -d
 cd backend && npm run dev
 ```
 
+Server runs on `http://localhost:3001`.
+
+#### Test the endpoints
+
+```bash
+# Health check
+curl http://localhost:3001/health
+
+# Send a mock bid request
+curl -X POST http://localhost:3001/bid \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "req-123",
+    "imp": [{ "id": "1", "banner": { "w": 320, "h": 50 } }],
+    "device": { "ip": "1.1.1.1", "os": "iOS" },
+    "user": { "id": "user-abc" },
+    "tmax": 100,
+    "at": 1
+  }'
+```
+
 ### 3. Start the frontend
 
 ```bash
